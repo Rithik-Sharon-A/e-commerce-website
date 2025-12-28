@@ -1,0 +1,105 @@
+.navbar{
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(8px, 2vw, 20px);
+    padding: clamp(10px, 2vw, 16px) clamp(16px, 4vw, 28px);
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    background-color: #121212;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.nav-logo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo img{
+    width: clamp(40px, 6vw, 56px);
+    height: clamp(40px, 6vw, 56px);
+    object-fit: contain;
+}
+
+.nav-logo p{
+    margin: 0;
+    color: #f7f7f7;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.nav-menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: clamp(10px, 3vw, 24px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: #e6e6e6;
+    text-transform: capitalize;
+    font-weight: 500;
+}
+
+.nav-menu li{
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-menu li:hover{
+    color: #ffffff;
+    border-color: #ff6f61;
+}
+
+.navbar button{
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: 1px solid #ff6f61;
+    background: #ff6f61;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    margin-left: auto;
+}
+
+.navbar button:hover{
+    background: #ff8579;
+    box-shadow: 0 6px 16px rgba(255, 111, 97, 0.3);
+    transform: translateY(-1px);
+}
+
+.navbar > img{
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .navbar{
+        padding: 10px 16px;
+        gap: 12px;
+    }
+
+    .nav-menu{
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px 16px;
+    }
+
+    .navbar button{
+        padding: 7px 14px;
+    }
+}
