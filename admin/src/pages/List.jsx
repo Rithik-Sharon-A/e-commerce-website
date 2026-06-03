@@ -24,7 +24,7 @@ const List = ({token}) => {
 
   const removeProduct = async (id) => {
     try {
-      const response = await axios.post(backendUrl + '/api/product/remove', {id},{headers:{token}})
+      const response = await axios.post(backendUrl + '/api/product/remove', { id }, { headers: { token: localStorage.getItem('token') } })
       if (response.data.success){
           toast.success(response.data.message);
           await fetchList();
