@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react'
 import { useContext } from 'react'
 import { ShopContext } from '../context/ShopContext'

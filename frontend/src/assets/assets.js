@@ -74,25 +74,28 @@ import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
 
+/** @returns {string} */
+const asUrl = (mod) => (typeof mod === 'string' ? mod : mod.src);
+
 export const assets = {
-    logo,
-    hero_img,
-    cart_icon,
-    dropdown_icon,
-    exchange_icon,
-    profile_icon,
-    quality_icon,
-    search_icon,
-    star_dull_icon,
-    star_icon,
-    bin_icon,
-    support_img,
-    menu_icon,
-    about_img,
-    contact_img,
-    razorpay_logo,
-    stripe_logo,
-    cross_icon
+    logo: asUrl(logo),
+    hero_img: asUrl(hero_img),
+    cart_icon: asUrl(cart_icon),
+    dropdown_icon: asUrl(dropdown_icon),
+    exchange_icon: asUrl(exchange_icon),
+    profile_icon: asUrl(profile_icon),
+    quality_icon: asUrl(quality_icon),
+    search_icon: asUrl(search_icon),
+    star_dull_icon: asUrl(star_dull_icon),
+    star_icon: asUrl(star_icon),
+    bin_icon: asUrl(bin_icon),
+    support_img: asUrl(support_img),
+    menu_icon: asUrl(menu_icon),
+    about_img: asUrl(about_img),
+    contact_img: asUrl(contact_img),
+    razorpay_logo: asUrl(razorpay_logo),
+    stripe_logo: asUrl(stripe_logo),
+    cross_icon: asUrl(cross_icon)
 }
 
 export const products = [

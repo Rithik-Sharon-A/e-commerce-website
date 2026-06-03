@@ -1,6 +1,8 @@
+"use client";
+
 import React from 'react'
 import { ShopContext } from '../context/ShopContext';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useContext } from 'react';
 
 const ProductItem = ({id,image,name,price}) => {
@@ -8,7 +10,7 @@ const ProductItem = ({id,image,name,price}) => {
     const {currency} = useContext(ShopContext);
 
   return (
-    <Link to={`/product/${id}`} className='text-gray-700 cursor-pointer'>
+    <Link href={`/product/${id}`} className='text-gray-700 cursor-pointer'>
         <div className='overflow-hidden'>
             <img className='hover:scale-110 transition ease-in-out' src={image[0]} alt="" />
         </div>

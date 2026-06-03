@@ -1,11 +1,15 @@
+"use client";
+
 import React, { useState, useContext } from 'react'
 import { assets } from '../assets/assets'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { ShopContext } from '../context/ShopContext'
 
 const Navbar = () => {
 
   const [visible, setVisible] = useState(false)
+  const pathname = usePathname()
 
   const { setShowSearch, getCartCount, navigate, token, setToken,setCartItems } = useContext(ShopContext);
 
@@ -20,28 +24,28 @@ const Navbar = () => {
   return (
     <div className='flex items-center justify-between py-5 font-medium'>
 
-      <Link to='/'><img src={assets.logo} className="w-36" alt="logo" /></Link>
+      <Link href='/'><img src={assets.logo} className="w-36" alt="logo" /></Link>
 
       <ul className='hidden sm:flex gap-5 text-sm text-gray-700'>
-        <NavLink to='/' className='flex flex-col items-center gap-1'>
+        <Link href='/' className={`flex flex-col items-center gap-1${pathname === '/' ? ' active' : ''}`}>
           <p>HOME</p>
           <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
-        </NavLink>
+        </Link>
 
-        <NavLink to='/collection' className='flex flex-col items-center gap-1'>
+        <Link href='/collection' className={`flex flex-col items-center gap-1${pathname === '/collection' ? ' active' : ''}`}>
           <p>COLLECTION</p>
           <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
-        </NavLink>
+        </Link>
 
-        <NavLink to='/about' className='flex flex-col items-center gap-1'>
+        <Link href='/about' className={`flex flex-col items-center gap-1${pathname === '/about' ? ' active' : ''}`}>
           <p>ABOUT</p>
           <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
-        </NavLink>
+        </Link>
 
-        <NavLink to='/contact' className='flex flex-col items-center gap-1'>
+        <Link href='/contact' className={`flex flex-col items-center gap-1${pathname === '/contact' ? ' active' : ''}`}>
           <p>CONTACT</p>
           <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
-        </NavLink>
+        </Link>
       </ul>
 
       <div className='flex items-center gap-6'>
@@ -71,7 +75,7 @@ const Navbar = () => {
           
         </div>
 
-        <Link to='/cart' className='relative'>
+        <Link href='/cart' className='relative'>
           <img src={assets.cart_icon} className='w-5 min-w-5' alt="" />
           <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white rounded-full text-[8px]'>
             {getCartCount()}
@@ -102,10 +106,10 @@ const Navbar = () => {
             <p>Back</p>
           </div>
 
-          <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/'>HOME</NavLink>
-          <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/collection'>COLLECTION</NavLink>
-          <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/about'>ABOUT</NavLink>
-          <NavLink onClick={() => setVisible(false)} className='py-2 pl-6 border' to='/contact'>CONTACT</NavLink>
+          <Link onClick={() => setVisible(false)} className={`py-2 pl-6 border${pathname === '/' ? ' active' : ''}`} href='/'>HOME</Link>
+          <Link onClick={() => setVisible(false)} className={`py-2 pl-6 border${pathname === '/collection' ? ' active' : ''}`} href='/collection'>COLLECTION</Link>
+          <Link onClick={() => setVisible(false)} className={`py-2 pl-6 border${pathname === '/about' ? ' active' : ''}`} href='/about'>ABOUT</Link>
+          <Link onClick={() => setVisible(false)} className={`py-2 pl-6 border${pathname === '/contact' ? ' active' : ''}`} href='/contact'>CONTACT</Link>
 
         </div>
       </div>
