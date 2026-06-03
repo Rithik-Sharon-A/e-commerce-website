@@ -52,7 +52,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Product.prototype, "sizes", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
 ], Product.prototype, "bestseller", void 0);
 __decorate([

@@ -5,7 +5,7 @@ export declare class ProductsController {
     constructor(productsService: ProductsService);
     list(): Promise<{
         success: boolean;
-        products: (import("mongoose").Document<unknown, {}, import("./product.schema").Product, {}, import("mongoose").DefaultSchemaOptions> & import("./product.schema").Product & {
+        products: (import("mongoose").Document<unknown, {}, import("./schemas/product.schema").Product, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/product.schema").Product & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
@@ -17,21 +17,26 @@ export declare class ProductsController {
         productId: string;
     }): Promise<{
         success: boolean;
-        product: (import("mongoose").Document<unknown, {}, import("./product.schema").Product, {}, import("mongoose").DefaultSchemaOptions> & import("./product.schema").Product & {
+        message: string;
+        product?: undefined;
+    } | {
+        success: boolean;
+        product: import("mongoose").Document<unknown, {}, import("./schemas/product.schema").Product, {}, import("mongoose").DefaultSchemaOptions> & import("./schemas/product.schema").Product & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
         } & {
             id: string;
-        }) | null;
+        };
+        message?: undefined;
+    }>;
+    add(req: FastifyRequest): Promise<{
+        success: boolean;
+        message: string;
     }>;
     remove(body: {
         id: string;
     }): Promise<{
-        success: boolean;
-        message: string;
-    }>;
-    add(req: FastifyRequest): Promise<{
         success: boolean;
         message: string;
     }>;

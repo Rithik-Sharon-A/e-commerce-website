@@ -22,13 +22,10 @@ let ProductsController = class ProductsController {
         this.productsService = productsService;
     }
     list() {
-        return this.productsService.listProducts();
+        return this.productsService.getAllProducts();
     }
     single(body) {
-        return this.productsService.singleProduct(body.productId);
-    }
-    remove(body) {
-        return this.productsService.removeProduct(body.id);
+        return this.productsService.getProductById(body.productId);
     }
     async add(req) {
         try {
@@ -44,12 +41,24 @@ let ProductsController = class ProductsController {
                     fields[part.fieldname] = String(part.value);
                 }
             }
-            return await this.productsService.addProduct(fields, files);
+            const dto = {
+                name: fields.name,
+                description: fields.description,
+                category: fields.category,
+                price: Number(fields.price),
+                subCategory: fields.subCategory,
+                bestseller: fields.bestseller === 'true',
+                sizes: JSON.parse(fields.sizes),
+            };
+            return await this.productsService.addProduct(dto, files);
         }
         catch (error) {
             const message = error instanceof Error ? error.message : 'Upload failed';
             throw new common_1.HttpException({ success: false, message }, common_1.HttpStatus.OK);
         }
+    }
+    remove(body) {
+        return this.productsService.removeProduct(body.id);
     }
 };
 exports.ProductsController = ProductsController;
@@ -67,14 +76,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "single", null);
 __decorate([
-    (0, common_1.Post)('remove'),
-    (0, common_1.UseGuards)(admin_auth_guard_1.AdminAuthGuard),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], ProductsController.prototype, "remove", null);
-__decorate([
     (0, common_1.Post)('add'),
     (0, common_1.UseGuards)(admin_auth_guard_1.AdminAuthGuard),
     __param(0, (0, common_1.Req)()),
@@ -82,6 +83,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "add", null);
+__decorate([
+    (0, common_1.Post)('remove'),
+    (0, common_1.UseGuards)(admin_auth_guard_1.AdminAuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], ProductsController.prototype, "remove", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('product'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])

@@ -8,7 +8,7 @@ export declare class Product {
     category: string;
     subCategory: string;
     sizes: string[];
-    bestseller?: boolean;
+    bestseller: boolean;
     date: number;
 }
 export declare const ProductSchema: import("mongoose").Schema<Product, import("mongoose").Model<Product, any, any, any, any, any, Product>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Product, import("mongoose").Document<unknown, {}, Product, {
@@ -83,7 +83,7 @@ export declare const ProductSchema: import("mongoose").Schema<Product, import("m
     }, "id"> & {
         id: string;
     }> | undefined;
-    bestseller?: import("mongoose").SchemaDefinitionProperty<boolean | undefined, Product, import("mongoose").Document<unknown, {}, Product, {
+    bestseller?: import("mongoose").SchemaDefinitionProperty<boolean, Product, import("mongoose").Document<unknown, {}, Product, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Product & {
         _id: import("mongoose").Types.ObjectId;

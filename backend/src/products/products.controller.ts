@@ -11,6 +11,7 @@ import {
 import type { FastifyRequest } from 'fastify';
 import { ProductsService } from './products.service';
 import { AdminAuthGuard } from '../auth/admin-auth.guard';
+import { AddProductDto, UploadedFilePart } from './dto/add-product.dto';
 
 @Controller('product')
 export class ProductsController {
@@ -18,18 +19,12 @@ export class ProductsController {
 
   @Get('list')
   list() {
-    return this.productsService.listProducts();
+    return this.productsService.getAllProducts();
   }
 
   @Post('single')
   single(@Body() body: { productId: string }) {
-    return this.productsService.singleProduct(body.productId);
-  }
-
-  @Post('remove')
-  @UseGuards(AdminAuthGuard)
-  remove(@Body() body: { id: string }) {
-    return this.productsService.removeProduct(body.id);
+    return this.productsService.getProductById(body.productId);
   }
 
   @Post('add')
@@ -37,7 +32,7 @@ export class ProductsController {
   async add(@Req() req: FastifyRequest) {
     try {
       const fields: Record<string, string> = {};
-      const files: { fieldname: string; buffer: Buffer }[] = [];
+      const files: UploadedFilePart[] = [];
 
       const parts = req.parts();
       for await (const part of parts) {
@@ -49,13 +44,26 @@ export class ProductsController {
         }
       }
 
-      return await this.productsService.addProduct(fields, files);
+      const dto: AddProductDto = {
+        name: fields.name,
+        description: fields.description,
+        category: fields.category,
+        price: Number(fields.price),
+        subCategory: fields.subCategory,
+        bestseller: fields.bestseller === 'true',
+        sizes: JSON.parse(fields.sizes),
+      };
+
+      return await this.productsService.addProduct(dto, files);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Upload failed';
-      throw new HttpException(
-        { success: false, message },
-        HttpStatus.OK,
-      );
+      throw new HttpException({ success: false, message }, HttpStatus.OK);
     }
+  }
+
+  @Post('remove')
+  @UseGuards(AdminAuthGuard)
+  remove(@Body() body: { id: string }) {
+    return this.productsService.removeProduct(body.id);
   }
 }

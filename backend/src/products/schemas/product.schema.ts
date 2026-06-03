@@ -26,8 +26,8 @@ export class Product {
   @Prop({ type: [String], required: true })
   sizes: string[];
 
-  @Prop()
-  bestseller?: boolean;
+  @Prop({ default: false })
+  bestseller: boolean;
 
   @Prop({ required: true })
   date: number;

@@ -1,77 +1,45 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { v2 as cloudinary } from 'cloudinary';
-import { Readable } from 'stream';
-import { Product } from './product.schema';
+import { CloudinaryService } from '../common/cloudinary.service';
+import { AddProductDto, UploadedFilePart } from './dto/add-product.dto';
+import { Product } from './schemas/product.schema';
 
-interface UploadedFilePart {
-  fieldname: string;
-  buffer: Buffer;
-}
+const IMAGE_FIELDS = ['image1', 'image2', 'image3', 'image4'];
 
 @Injectable()
-export class ProductsService implements OnModuleInit {
+export class ProductsService {
   constructor(
-    @InjectModel('product') private readonly productModel: Model<Product>,
-    private readonly configService: ConfigService,
+    @InjectModel(Product.name) private readonly productModel: Model<Product>,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  onModuleInit() {
-    cloudinary.config({
-      cloud_name: this.configService.get<string>('CLOUDINARY_NAME'),
-      api_key: this.configService.get<string>('CLOUDINARY_API_KEY'),
-      api_secret: this.configService.get<string>('CLOUDINARY_SECRET_KEY'),
-    });
-  }
-
-  private uploadBuffer(buffer: Buffer): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: 'image' },
-        (error, result) => {
-          if (error || !result) {
-            reject(error ?? new Error('Cloudinary upload failed'));
-            return;
-          }
-          resolve(result.secure_url);
-        },
-      );
-      Readable.from(buffer).pipe(uploadStream);
-    });
-  }
-
-  async addProduct(
-    fields: Record<string, string>,
-    files: UploadedFilePart[],
-  ) {
-    const imageFields = ['image1', 'image2', 'image3', 'image4'];
-    const images = files.filter((f) => imageFields.includes(f.fieldname));
-
-    const imagesUrl = await Promise.all(
-      images.map((item) => this.uploadBuffer(item.buffer)),
-    );
-
-    const productData = {
-      name: fields.name,
-      description: fields.description,
-      category: fields.category,
-      price: Number(fields.price),
-      subCategory: fields.subCategory,
-      bestseller: fields.bestseller === 'true',
-      sizes: JSON.parse(fields.sizes),
-      image: imagesUrl,
-      date: Date.now(),
-    };
-
-    await this.productModel.create(productData);
-    return { success: true, message: 'Product Added' };
-  }
-
-  async listProducts() {
+  async getAllProducts() {
     const products = await this.productModel.find({});
     return { success: true, products };
+  }
+
+  async getProductById(id: string) {
+    const product = await this.productModel.findById(id);
+    if (!product) {
+      return { success: false, message: 'Product not found' };
+    }
+    return { success: true, product };
+  }
+
+  async addProduct(dto: AddProductDto, files: UploadedFilePart[]) {
+    const imageUrls = await this.cloudinaryService.uploadFiles(
+      files,
+      IMAGE_FIELDS,
+    );
+
+    await this.productModel.create({
+      ...dto,
+      image: imageUrls,
+      date: Date.now(),
+    });
+
+    return { success: true, message: 'Product Added' };
   }
 
   async removeProduct(id: string) {
@@ -80,10 +48,5 @@ export class ProductsService implements OnModuleInit {
       return { success: false, message: 'Product not found' };
     }
     return { success: true, message: 'Product removed' };
-  }
-
-  async singleProduct(productId: string) {
-    const product = await this.productModel.findById(productId);
-    return { success: true, product };
   }
 }

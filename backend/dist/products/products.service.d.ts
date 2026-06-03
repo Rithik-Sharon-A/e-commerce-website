@@ -1,22 +1,12 @@
-import { OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
-import { Product } from './product.schema';
-interface UploadedFilePart {
-    fieldname: string;
-    buffer: Buffer;
-}
-export declare class ProductsService implements OnModuleInit {
+import { CloudinaryService } from '../common/cloudinary.service';
+import { AddProductDto, UploadedFilePart } from './dto/add-product.dto';
+import { Product } from './schemas/product.schema';
+export declare class ProductsService {
     private readonly productModel;
-    private readonly configService;
-    constructor(productModel: Model<Product>, configService: ConfigService);
-    onModuleInit(): void;
-    private uploadBuffer;
-    addProduct(fields: Record<string, string>, files: UploadedFilePart[]): Promise<{
-        success: boolean;
-        message: string;
-    }>;
-    listProducts(): Promise<{
+    private readonly cloudinaryService;
+    constructor(productModel: Model<Product>, cloudinaryService: CloudinaryService);
+    getAllProducts(): Promise<{
         success: boolean;
         products: (import("mongoose").Document<unknown, {}, Product, {}, import("mongoose").DefaultSchemaOptions> & Product & {
             _id: import("mongoose").Types.ObjectId;
@@ -26,19 +16,27 @@ export declare class ProductsService implements OnModuleInit {
             id: string;
         })[];
     }>;
-    removeProduct(id: string): Promise<{
+    getProductById(id: string): Promise<{
         success: boolean;
         message: string;
-    }>;
-    singleProduct(productId: string): Promise<{
+        product?: undefined;
+    } | {
         success: boolean;
-        product: (import("mongoose").Document<unknown, {}, Product, {}, import("mongoose").DefaultSchemaOptions> & Product & {
+        product: import("mongoose").Document<unknown, {}, Product, {}, import("mongoose").DefaultSchemaOptions> & Product & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
         } & {
             id: string;
-        }) | null;
+        };
+        message?: undefined;
+    }>;
+    addProduct(dto: AddProductDto, files: UploadedFilePart[]): Promise<{
+        success: boolean;
+        message: string;
+    }>;
+    removeProduct(id: string): Promise<{
+        success: boolean;
+        message: string;
     }>;
 }
-export {};
